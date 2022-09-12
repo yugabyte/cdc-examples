@@ -1,0 +1,66 @@
+version: "3"
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: debezium/zookeeper:1.7
+    user: "0:0"
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+
+  kafka:
+    container_name: kafka
+    image: debezium/kafka:1.7
+    links:
+      - zookeeper
+    user: "0:0"
+    ports:
+      - 9092:9092
+      - 9099:9099
+    restart: unless-stopped
+    environment:
+      KAFKA_CFG_BROKER_ID: 100
+      ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_CFG_LISTENERS: "CLIENT://:9093,EXTERNAL://:9092"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "CLIENT://:9093,EXTERNAL://kafka:9092"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT"
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: CLIENT
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_OPTS: -Djdk.tls.client.protocols=TLSv1.2
+  
+  kafka-connect:
+    container_name: kafka-connect
+    image: quay.io/yugabyte/debezium-connector:latest
+    depends_on: [ zookeeper, kafka ]
+    ports:
+      - 8083:8083
+    restart: unless-stopped
+    environment:
+      BOOTSTRAP_SERVERS: "kafka:9092"
+      GROUP_ID: kafka-connect-group
+      CONFIG_STORAGE_TOPIC: kafka-connect_configs
+      CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      OFFSET_STORAGE_TOPIC: kafka-connect_offset
+      OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      STATUS_STORAGE_TOPIC: kafka-connect_status
+      STATUS_STORAGE_REPLICATION_FACTOR: 1
+      REST_ADVERTISED_HOST_NAME: kafka-connect
+      CONNECT_REST_PORT: 8083
+  
+  pg:
+    container_name: pg
+    image: debezium/example-postgres:1.7
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
