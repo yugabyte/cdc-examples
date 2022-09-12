@@ -12,10 +12,12 @@ We will need to create a "settings.env" file to provide config information to th
 |--------|------------|
 |KAFKA_HOST| Host and port where Kafka is running|
 |USERID| uid that docker processes should use. Get from `id -u ${USER}`|
+|YB_METRICS| Address of your YB cluster|
 
 ## Running with Kafka Connect
 
-   docker compose --env-file <path-to>/settings.env -d
+   docker compose -f docker-compose.yaml --env-file <path-to>/settings.env up -d
+   docker compose -f kafka-connect.yaml --env-file <path-to>/settings.env up -d
 
 ## Connecting the source connector
 

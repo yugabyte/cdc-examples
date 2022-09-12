@@ -8,6 +8,6 @@ scrape_configs:
    - targets: ['kafka-connect:9876']
 
  - job_name: 'yugabyted'
-   metrics_path: '/prometheus-metrics' 
+   metrics_path: '/prometheus-metrics'
    static_configs:
-   - targets: ['172.165.20.83:9000']
+   - targets: ['${YB_METRICS}:9000']

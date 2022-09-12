@@ -68,7 +68,6 @@ services:
     depends_on:
       - broker
       - schema-registry
-      - kafka-connect
       - ksqldb-server
     ports:
       - "9021:9021"
@@ -90,7 +89,6 @@ services:
     container_name: ksqldb-server
     depends_on:
       - broker
-      - kafka-connect
     ports:
       - "8088:8088"
     environment:
@@ -121,29 +119,6 @@ services:
       KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
-
-  kafka-connect:
-    build:
-      context: ./jmx-exporter
-    container_name: kafka-connect
-    depends_on:
-      - broker
-      - zookeeper
-    ports:
-      - 8083:8083
-      - 9875:9875
-      - 9876:9876
-    environment:
-      BOOTSTRAP_SERVERS: ${KAFKA_HOST}
-      GROUP_ID: 1
-      CONFIG_STORAGE_TOPIC: kafka-connect_configs
-      OFFSET_STORAGE_TOPIC: kafka-connect_offset
-      STATUS_STORAGE_TOPIC: kafka-connect_status
-      HOST_NAME: "0.0.0.0"
-      REST_ADVERTISED_HOST_NAME: kafka-connect
-      CONNECT_REST_PORT: 8083
-      KAFKA_JMX_PORT: '9875'
-      KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.9.jar=9876:/etc/jmx-exporter/kafka-connect.yml"
 
   prometheus:
     ports:
