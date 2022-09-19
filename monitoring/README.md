@@ -5,8 +5,7 @@ Yugabyte DB to Kafka-connect as a source connector.
 
 ## Pre-requisites
 Ensure that docker and docker compose is installed.
-We will need an instance of YugabyteDB running (see
-https://docs.yugabyte.com/preview/yugabyte-cloud/cloud-basics/create-clusters/) with a stream created on it.
+We will need an instance of YugabyteDB running ([see this](https://docs.yugabyte.com/preview/yugabyte-cloud/cloud-basics/create-clusters/)) with a stream created on it.
 
 ## Creating the "env" file
 We will need to create a "settings.env" file to provide config information to the docker containers.
