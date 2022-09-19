@@ -1,0 +1,20 @@
+version: "3"
+services:
+  prometheus:
+    ports:
+      - 9090:9090
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    build:
+      context: ./grafana-dashboard
+    container_name: grafana
+    ports:
+      - 3000:3000
+    links:
+      - prometheus
+    environment:
+      - DS_PROMETHEUS=prometheus
