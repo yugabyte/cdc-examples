@@ -8,8 +8,8 @@ The following example uses a PostgreSQL database as the sink database, which wil
 1. Start YugabyteDB
   This can be a local instance as well as a universe running on Yugabyte Anywhere. All you need is the IP of the nodes where the tserver and master processes are running.
   ```sh
-  export NODE=172.165.31.198
-  export MASTERS=172.165.31.198:7100
+  export NODE=<IP-OF-YOUR-NODE>
+  export MASTERS=<MASTER-ADDRESSES>
   ```
 2. Create a table
   ```sql
