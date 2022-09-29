@@ -39,7 +39,7 @@ services:
   
   kafka-connect:
     container_name: kafka-connect
-    image: quay.io/yugabyte/debezium-connector:latest
+    image: quay.io/yugabyte/debezium-connector:1.7.0.12-BETA
     depends_on: [ zookeeper, kafka ]
     ports:
       - 8083:8083
@@ -64,3 +64,18 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+  
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 8079:8080
+    depends_on:
+      - zookeeper
+      - kafka
+      - kafka-connect
+    restart: unless-stopped
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"
+      KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"
