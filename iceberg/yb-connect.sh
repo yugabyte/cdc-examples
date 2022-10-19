@@ -21,7 +21,7 @@ payload() {
         "database.port":"5433",
         "database.master.addresses": "${PGHOST}:7100",
         "database.user": "yugabyte",
-        "database.password": "yugabyte",
+        "database.password": "${PGPASSWORD}",
         "database.dbname" : "yugabyte",
         "database.server.name": "iceberg",
         "table.include.list":"${table}",
