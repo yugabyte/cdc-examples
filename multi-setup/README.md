@@ -28,16 +28,16 @@ IP address. The IP address is specified in an environment variable -
     export USERID=`id -u`
     export KAFKA_HOST="`hostname -I | awk '{print $1}'`:19092"
 
-    mdkir -p volumes/kafka/kafka-data
-    mdkir -p volumes/kafka/zk-data
+    mkdir -p volumes/kafka/kafka-data
+    mkdir -p volumes/kafka/zk-data
 
-    docker compose up -f confluent.yaml
+    docker compose -f confluent.yaml up -d
 
 ## Setup Kafka Connect and Postgres
 
 Kafka Connect and Postgres container can be setup in a different VM/machine
 
-    docker compose up -f kafka-connect-pg.yaml
+    docker compose -f kafka-connect-pg.yaml up -d
 
     export TABLES="public.employee"
     ./pg-connect.sh
