@@ -2,13 +2,13 @@ version: "3"
 services:
   kafka-connect:
     container_name: kafka-connect
-    image: quay.io/yugabyte/debezium-connector:1.7.0.12-BETA
-    depends_on: [ zookeeper, kafka ]
+    image: quay.io/yugabyte/debezium-connector:latest
+    depends_on: [ zookeeper, broker ]
     ports:
       - 8083:8083
     restart: unless-stopped
     environment:
-      BOOTSTRAP_SERVERS: "kafka:9092"
+      BOOTSTRAP_SERVERS: "broker:9092"
       GROUP_ID: kafka-connect-group
       CONFIG_STORAGE_TOPIC: kafka-connect_configs
       CONFIG_STORAGE_REPLICATION_FACTOR: 1

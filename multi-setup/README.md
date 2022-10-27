@@ -1,5 +1,6 @@
 # Multi Node CDC Pipeline
 
+cdc-quickstart-kafka-connect installs all containers in the same VM. 
 This examples sets up the CDC Pipeline on different machines. The components of
 the CDC Pipeline are:
 * Kafka Connect that runs connectors to YugabyteDB and Postgres
@@ -31,3 +32,12 @@ IP address. The IP address is specified in an environment variable -
     mdkir -p volumes/kafka/zk-data
 
     docker compose up -f confluent.yaml
+
+## Setup Kafka Connect and Postgres
+
+Kafka Connect and Postgres container can be setup in a different VM/machine
+
+    docker compose up -f kafka-connect-pg.yaml
+
+    export TABLES="public.employee"
+    ./pg-connect.sh
