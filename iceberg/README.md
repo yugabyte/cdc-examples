@@ -28,9 +28,11 @@ The dataset emulates a simple IOT workload. The workload consists of two tables:
 Use ysqlsh to setup the tables
 
     # Store YugabyteDB Master IP addresses in an env variable
-
     export MASTER_ADDRESSES=<list of addresses>
 
+    # Save the IP address of a Yugabyte master in an env variable
+    export PGHOST=<MASTER IP ADDRESS>
+    
     # Drop if required.
     ysqlsh -f drop_schema.sql
     
@@ -43,8 +45,6 @@ Use ysqlsh to setup the tables
     # Save the output of the previous command in an env variable.
     export CDC_SDK_STREAM_ID=<id from previous command>
 
-    # Save the IP address of a Yugabyte master in an env variable
-    export PGHOST=<MASTER IP ADDRESS>
 
 ## Setup Kafka/Confluent Cloud
 
