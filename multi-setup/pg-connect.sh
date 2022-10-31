@@ -21,7 +21,7 @@ payload() {
         "transforms": "dropPrefix, unwrap",
         "transforms.dropPrefix.type":"org.apache.kafka.connect.transforms.RegexRouter",
         "transforms.dropPrefix.regex": "${TOPIC_PREFIX}.public.(.*)"
-        "transforms.dropPrefix.replacement": "\$1"
+        "transforms.dropPrefix.replacement": "\$1",
         "transforms.unwrap.type": "io.debezium.connector.yugabytedb.transforms.YBExtractNewRecordState",   
         "transforms.unwrap.drop.tombstones": "false",
         "auto.create": "true",   
