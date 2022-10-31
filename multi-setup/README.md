@@ -68,4 +68,11 @@ Kafka Connect and Postgres container can be setup in a different VM/machine
     TABLES="public.customer,public.district,public.item,public.new_order,public.oorder,public.order_line,public.stock,public.warehouse"
 
     ./yb-connect.sh
+
+    # Note: PSQL prefix is used because PGHOST is also used by Yugabyte scripts.
+    export PSQL_HOST=<any host in the YugabyteDB cluster>
+    export PSQL_USER=<Username of role in YugabyteDB>
+    export PSQL_PWD=<Password of role in YugabyteDB>
+    export PSQL_DB=<Database to connecto to>
+
     ./pg-connect.sh

@@ -17,7 +17,7 @@ payload() {
         "tasks.max": "${num_tables}",
         "topics.regex": "${TOPIC_PREFIX}.public.(.*)",
         "dialect.name": "PostgreSqlDatabaseDialect",
-        "connection.url": "jdbc:postgresql://pg:5432/postgres?user=postgres&password=postgres&sslMode=require",    
+        "connection.url":"jdbc:postgresql://${PSQL_HOST}:5432/${PSQL_DB}?user=${PSQL_USER}&password=${PSQL_PWD}&sslMode=require", 
         "transforms": "dropPrefix, unwrap",
         "transforms.dropPrefix.type":"org.apache.kafka.connect.transforms.RegexRouter",
         "transforms.dropPrefix.regex": "${TOPIC_PREFIX}.public.(.*)",
@@ -26,7 +26,6 @@ payload() {
         "transforms.unwrap.drop.tombstones": "false",
         "auto.create": "true",   
         "insert.mode": "upsert",    
-        "pk.fields": "id",    
         "pk.mode": "record_key",   
         "delete.enabled": "true",
         "auto.evolve":"true"
