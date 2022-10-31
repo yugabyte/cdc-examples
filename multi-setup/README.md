@@ -3,9 +3,29 @@
 cdc-quickstart-kafka-connect installs all containers in the same VM. 
 This examples sets up the CDC Pipeline on different machines. The components of
 the CDC Pipeline are:
+* YugabyteDB Cluster
 * Kafka Connect that runs connectors to YugabyteDB and Postgres
 * Kafka
-* Postgres
+* Postgresql
+
+## TPCC Setup
+
+The example uses TPCC tables. Setup the TPCC benchmark by following the
+instructions in [Yugabyte docs](https://docs.yugabyte.com/preview/benchmark/tpcc-ysql/)
+
+    # Create the tables
+    ./tpccbenchmark --create=true --nodes=<CSV of YB Cluster IP/Host names>
+
+    # Create a CDC Stream
+    # Store YugabyteDB Master IP addresses in an env variable
+    export MASTER_ADDRESSES=<list of addresses>
+
+    # Setup CDCSDK Stream
+    yb-admin create_change_data_stream ysql.yugabyte --master_addresses $MASTER_ADDRESSES
+
+    # Save the output of the previous command in an env variable.
+    export CDC_SDK_STREAM_ID=<id from previous command>
+
 
 ## Setup Kafka
 
@@ -33,11 +53,19 @@ IP address. The IP address is specified in an environment variable -
 
     docker compose -f confluent.yaml up -d
 
-## Setup Kafka Connect and Postgres
+## Setup Kafka Connect, Yugabyte and Postgres Connectors
 
 Kafka Connect and Postgres container can be setup in a different VM/machine
 
     docker compose -f kafka-connect-pg.yaml up -d
 
-    export TABLES="public.employee"
+    export PGHOST=<any host in the YugabyteDB cluster>
+    export PGUSER=<Username of role in YugabyteDB>
+    export PGPASSWORD=<Password of role in YugabyteDB>
+    export PGDATABASE=<Database to connecto to>
+    export TOPIC_PREFIX=tpcc
+
+    TABLES="public.customer,public.district,public.item,public.new_order,public.oorder,public.order_line,public.stock,public.warehouse"
+
+    ./yb-connect.sh
     ./pg-connect.sh

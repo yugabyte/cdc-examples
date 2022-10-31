@@ -6,7 +6,7 @@ if test -f "$FILE"; then
     export $(grep -v '^#' $FILE | xargs)
 fi
 
-num_files=$(echo $TABLES | tr -cd , | wc -c)
+num_tables=$(echo $TABLES | tr -cd , | wc -c)
 
 payload() {
     cat << EOF
@@ -14,7 +14,7 @@ payload() {
     "name": "jdbc-sink-pg",
     "config": {
         "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",    
-        "tasks.max": "${num_files}",
+        "tasks.max": "${num_tables}",
         "topics.regex": "${TOPIC_PREFIX}.public.(.*)",
         "dialect.name": "PostgreSqlDatabaseDialect",
         "connection.url": "jdbc:postgresql://pg:5432/postgres?user=postgres&password=postgres&sslMode=require",    
