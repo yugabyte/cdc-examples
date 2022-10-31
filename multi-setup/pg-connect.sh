@@ -15,12 +15,12 @@ payload() {
     "config": {
         "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",    
         "tasks.max": "${num_files}",
-        "topics.regex": "${TOPIC_PREFIX}\\.public\\.(.*)",
+        "topics.regex": "${TOPIC_PREFIX}.public.(.*)",
         "dialect.name": "PostgreSqlDatabaseDialect",
         "connection.url": "jdbc:postgresql://pg:5432/postgres?user=postgres&password=postgres&sslMode=require",    
         "transforms": "dropPrefix, unwrap",
         "transforms.dropPrefix.type":"org.apache.kafka.connect.transforms.RegexRouter",
-        "transforms.dropPrefix.regex": "${TOPIC_PREFIX}\\.public\\.(.*)"
+        "transforms.dropPrefix.regex": "${TOPIC_PREFIX}.public.(.*)"
         "transforms.dropPrefix.replacement": "\$1"
         "transforms.unwrap.type": "io.debezium.connector.yugabytedb.transforms.YBExtractNewRecordState",   
         "transforms.unwrap.drop.tombstones": "false",
