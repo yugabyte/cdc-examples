@@ -6,20 +6,22 @@ if test -f "$FILE"; then
     export $(grep -v '^#' $FILE | xargs)
 fi
 
-export PATH=$PATH:$YBPATH
+num_files=$(echo $TABLES | tr -cd , | wc -c)
 
 payload() {
     cat << EOF
 {
-    "name": "jdbc-sink-${TOPIC_PREFIX}-${FQDN[0]}-${FQDN[1]}",
+    "name": "jdbc-sink-pg",
     "config": {
         "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",    
-        "tasks.max": "3",
-        "topics": "${TOPIC_PREFIX}.${table}",
+        "tasks.max": "${num_files}",
+        "topics.regex": "${TOPIC_PREFIX}\\.public\\.(.*)",
         "dialect.name": "PostgreSqlDatabaseDialect",
-        "table.name.format": "${FQDN[1]}",    
         "connection.url": "jdbc:postgresql://pg:5432/postgres?user=postgres&password=postgres&sslMode=require",    
-        "transforms": "unwrap",    
+        "transforms": "dropPrefix, unwrap",
+        "transforms.dropPrefix.type":"org.apache.kafka.connect.transforms.RegexRouter",
+        "transforms.dropPrefix.regex": "${TOPIC_PREFIX}\\.public\\.(.*)"
+        "transforms.dropPrefix.replacement": "\$1"
         "transforms.unwrap.type": "io.debezium.connector.yugabytedb.transforms.YBExtractNewRecordState",   
         "transforms.unwrap.drop.tombstones": "false",
         "auto.create": "true",   
@@ -33,11 +35,4 @@ payload() {
 EOF
 }
 
-IFS=',' read -ra TABLE_ARRAY <<< "$TABLES"
-for table in "${TABLE_ARRAY[@]}"; do
-    echo $table
-    IFS='.' read -ra FQDN <<< "$table"
-    curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d "$(payload)"
-
-
-done
+curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d "$(payload)"
