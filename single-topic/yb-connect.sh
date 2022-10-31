@@ -6,7 +6,6 @@ if test -f "$FILE"; then
     export $(grep -v '^#' $FILE | xargs)
 fi
 
-export TABLES="public.customer,public.district,public.item,public.new_order,public.oorder,public.order_line,public.stock,public.warehouse"
 payload() {
     cat << EOF
 {
@@ -25,7 +24,7 @@ payload() {
         "table.include.list":"${TABLES}",
         "database.streamid":"${CDC_SDK_STREAM_ID}",
         "snapshot.mode":"never",
-        "consistency.mode":"key",
+        "consistency.mode":"${CMODE:-default}",
         "transforms":"Reroute",
         "transforms.Reroute.type":"io.debezium.transforms.ByLogicalTableRouter",
         "transforms.Reroute.topic.regex":"(.*)",
