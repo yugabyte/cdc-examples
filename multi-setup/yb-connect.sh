@@ -24,7 +24,7 @@ payload() {
         "database.server.name": "${TOPIC_PREFIX}",
         "table.include.list":"${TABLES}",
         "database.streamid":"${CDC_SDK_STREAM_ID}",
-        "snapshot.mode":"never",
+        "snapshot.mode":"never"
     }
 }
 EOF
