@@ -30,7 +30,8 @@
   "panels": [
     {
       "datasource": {
-        "type": "prometheus"
+        "type": "prometheus",
+        "uid": "P1809F7CD0C75ACF3"
       },
       "fieldConfig": {
         "defaults": {
@@ -75,9 +76,13 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.2",
+      "pluginVersion": "9.2.6",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
           "editorMode": "builder",
           "expr": "debezium_metrics_totalnumberofeventsseen{context=\"streaming\"}",
           "legendFormat": "__auto",
@@ -85,12 +90,13 @@
           "refId": "A"
         }
       ],
-      "title": "Records sent by client to sink",
+      "title": "debezium_metrics_totalnumberofeventsseen",
       "type": "stat"
     },
     {
       "datasource": {
-        "type": "prometheus"
+        "type": "prometheus",
+        "uid": "P1809F7CD0C75ACF3"
       },
       "fieldConfig": {
         "defaults": {
@@ -165,6 +171,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
           "editorMode": "builder",
           "expr": "cdcsdk_traffic_sent",
           "legendFormat": "__auto",
@@ -172,12 +182,13 @@
           "refId": "A"
         }
       ],
-      "title": "Bytes sent by CDC service",
+      "title": "cdcsdk_traffic_sent",
       "type": "timeseries"
     },
     {
       "datasource": {
-        "type": "prometheus"
+        "type": "prometheus",
+        "uid": "P1809F7CD0C75ACF3"
       },
       "fieldConfig": {
         "defaults": {
@@ -252,6 +263,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
           "editorMode": "builder",
           "expr": "cdcsdk_change_event_count",
           "legendFormat": "__auto",
@@ -259,7 +274,7 @@
           "refId": "A"
         }
       ],
-      "title": "Records sent by cdc service",
+      "title": "cdcsdk_change_event_count",
       "type": "timeseries"
     }
   ],
@@ -271,13 +286,13 @@
     "list": []
   },
   "time": {
-    "from": "2022-09-21T07:03:36.994Z",
-    "to": "2022-09-21T07:14:03.295Z"
+    "from": "now-5m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Performance Evaluation",
   "uid": "ZJyN4xnVz",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }

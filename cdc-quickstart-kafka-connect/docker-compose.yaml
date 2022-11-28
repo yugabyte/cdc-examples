@@ -38,8 +38,7 @@ services:
       KAFKA_OPTS: -Djdk.tls.client.protocols=TLSv1.2
 
   kafka-connect:
-    build:
-      context: ./jmx-exporter
+    image: quay.io/yugabyte/debezium-connector:latest
     container_name: kafka-connect
     depends_on: [ zookeeper, kafka ]
     ports:
@@ -58,7 +57,7 @@ services:
       REST_ADVERTISED_HOST_NAME: kafka-connect
       CONNECT_REST_PORT: 8083
       KAFKA_JMX_PORT: '9876'
-      KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.9.jar=9876:/etc/jmx-exporter/kafka-connect.yml"
+      KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.9.jar=9876:/etc/jmx-exporter/metrics.yml"
 
   pg:
     container_name: pg
