@@ -1,8 +1,7 @@
 version: "3"
 services:
   kafka-connect:
-    build:
-      context: ./jmx-exporter
+    image: quay.io/yugabyte/debezium-connector:latest
     container_name: kafka-connect
     ports:
       - 8083:8083
@@ -18,4 +17,4 @@ services:
       REST_ADVERTISED_HOST_NAME: kafka-connect
       CONNECT_REST_PORT: 8083
       KAFKA_JMX_PORT: '9875'
-      KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.9.jar=9876:/etc/jmx-exporter/kafka-connect.yml"
+      KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.9.jar=9876:/etc/jmx-exporter/metrics.yml"
