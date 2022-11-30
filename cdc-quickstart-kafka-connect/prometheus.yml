@@ -10,4 +10,6 @@ scrape_configs:
  - job_name: 'yugabyted'
    metrics_path: '/prometheus-metrics'
    static_configs:
-   - targets: ['${YB_METRICS}:9000']
+   - targets: ['${NODE}:9000']
+
+# Add more jobs here to get metrics from multiple nodes
