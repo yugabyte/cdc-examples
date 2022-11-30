@@ -128,6 +128,7 @@ services:
     depends_on: [ zookeeper, broker ]
     ports:
       - 8083:8083
+      - 9876:9876
     restart: unless-stopped
     environment:
       BOOTSTRAP_SERVERS: "broker:19092"
@@ -138,6 +139,8 @@ services:
       HOST_NAME: "0.0.0.0"
       REST_ADVERTISED_HOST_NAME: kafka-connect
       CONNECT_REST_PORT: 8083
+      KAFKA_JMX_PORT: '9876'
+      KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.9.jar=9876:/etc/jmx-exporter/metrics.yml"
 
   pg:
     container_name: pg

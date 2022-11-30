@@ -73,7 +73,7 @@ If you want to use your own custom connector to the docker image, be ready with 
 4. Edit the contents of the Dockerfile
   ```Dockerfile
   FROM quay.io/yugabyte/debezium-connector:latest
-  
+
   COPY jarFileXYZ.jar $KAFKA_CONNECT_PLUGINS_DIR/debezium-connector-yugabytedb/
   ```
 5. Build your docker image
@@ -81,3 +81,9 @@ If you want to use your own custom connector to the docker image, be ready with 
   docker build . -t my-custom-image
   ```
   **NOTE: Do not forget to edit the docker-compose file with this custom image name in case you want to use this newly created image with the docker compose commands**
+
+## Monitoring Metrics
+
+The docker compose command will bring up the containers for Prometheus and Grafana. Prometheus is accessible at port ```9090``` and Grafana is accessible at port ```3000```.
+
+  **NOTE: To get metrics for multi-node clusters, you will have to add jobs corresponding to each node in the file** ```prometheus.yml```
