@@ -57,6 +57,9 @@ IP address. The IP address is specified in an environment variable -
 
 Kafka Connect and Postgres container can be setup in a different VM/machine
 
+    export USERID=`id -u`
+    export KAFKA_HOST="<IP of Kafka Machine>:19092"
+
     docker compose -f kafka-connect-pg.yaml up -d
 
     export PGHOST=<any host in the YugabyteDB cluster>
