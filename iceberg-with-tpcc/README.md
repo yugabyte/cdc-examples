@@ -1,8 +1,12 @@
 # Running TPCC workload on Iceberg with Before Image
 
+## Contents
+* [Steps to run the pipeline](#steps-to-run-the-pipeline)
+* [Troubleshooting](#troubleshooting)
+
 ## Steps to run the pipeline
 
-#### 1. Setting up YugabyteDB
+### 1. Setting up YugabyteDB
 Follow [these instructions](https://docs.yugabyte.com/preview/quick-start-yugabytedb-managed/) to setup a YugabyteDB cluster
 
 #### 2. TPCC setup
@@ -15,7 +19,7 @@ This example uses the TPCC workload, follow the instructions [here](https://docs
 
 We will come back to run the load and execute phase later.
 
-#### 3. Setting up the environment variables
+### 3. Setting up the environment variables
 
 ```sh
 export AWS_ACCESS_KEY_ID=<aws-access-key-id>
@@ -26,7 +30,7 @@ export MASTER_ADDRESSES=<CSV of IP addresses of nodes where master process is ru
 export PG_HOST=<IP of one of the tservers>
 ```
 
-#### 4. Create a S3 bucket and Setup AWS Glue
+### 4. Create a S3 bucket and Setup AWS Glue
 
 Create a S3 bucket named `tpcc-iceberg`
 
@@ -39,7 +43,7 @@ aws glue create-database --database-input "{\"Name\":\"iceberg_tpcc\",\"Location
 export S3_PATH=s3://tpcc-iceberg
 ```
 
-#### 5. Create a DB Stream ID using yb-admin
+### 5. Create a DB Stream ID using yb-admin
 
 You will need to use [yb-admin](https://docs.yugabyte.com/preview/admin/yb-admin/#change-data-capture-cdc-commands) to create a DB stream ID with before image enabled. Run the following command:
 
@@ -56,13 +60,13 @@ Now store the stream ID to the environment variable:
 export CDCSDK_STREAM_ID=<DB-stream-id-you-generated>
 ```
 
-#### 6. Start the docker containers
+### 6. Start the docker containers
 
 ```sh
 docker-compose up -f docker-compose.yaml
 ```
 
-#### 7. Deploy the source and sink connectors
+### 7. Deploy the source and sink connectors
 
 ```sh
 # This deploys the source connectors
@@ -72,7 +76,7 @@ docker-compose up -f docker-compose.yaml
 ./setup-tpcc-sink.sh
 ```
 
-#### 8. Start the TPCC load
+### 8. Start the TPCC load
 
 ```sh
 ./tpccbenchmark --load=true --warehouses=1 --nodes=<CSV of cluster IPs>
