@@ -9,7 +9,7 @@
 ### 1. Setting up YugabyteDB
 Follow [these instructions](https://docs.yugabyte.com/preview/quick-start-yugabytedb-managed/) to setup a YugabyteDB cluster
 
-#### 2. TPCC setup
+### 2. TPCC setup
 This example uses the TPCC workload, follow the instructions [here](https://docs.yugabyte.com/preview/benchmark/tpcc-ysql/) to set them up.
 
 ```sh
