@@ -72,7 +72,7 @@ docker build . -t connect-with-iceberg:latest
 docker-compose up -f docker-compose.yaml
 ```
 
-### 7. Deploy the source and sink connectors
+### 8. Deploy the source and sink connectors
 
 ```sh
 # This deploys the source connectors
@@ -82,7 +82,7 @@ docker-compose up -f docker-compose.yaml
 ./setup-tpcc-sink.sh
 ```
 
-### 7. Start the TPCC load
+### 9. Start the TPCC load
 
 ```sh
 ./tpccbenchmark --load=true --warehouses=1 --nodes=<CSV of cluster IPs>
