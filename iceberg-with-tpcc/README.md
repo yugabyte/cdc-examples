@@ -60,7 +60,13 @@ Now store the stream ID to the environment variable:
 export CDCSDK_STREAM_ID=<DB-stream-id-you-generated>
 ```
 
-### 6. Start the docker containers
+### 6. Build the required container
+
+```sh
+docker build . -t connect-with-iceberg:latest
+```
+
+### 7. Start the docker containers
 
 ```sh
 docker-compose up -f docker-compose.yaml
@@ -76,7 +82,7 @@ docker-compose up -f docker-compose.yaml
 ./setup-tpcc-sink.sh
 ```
 
-### 8. Start the TPCC load
+### 7. Start the TPCC load
 
 ```sh
 ./tpccbenchmark --load=true --warehouses=1 --nodes=<CSV of cluster IPs>
