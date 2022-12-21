@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -82,7 +82,8 @@
               }
             ]
           }
-        }
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 10,
@@ -245,6 +246,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "Number of change events sent by cdc service",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -385,7 +387,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -429,6 +432,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "The free capacity of the queue used to pass events between the streamer and the main Kafka Connect loop.\n\n",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -472,7 +476,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.1",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
@@ -494,6 +498,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -542,7 +547,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -586,6 +592,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "The current volume, in bytes, of records in the queue.\n\n",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -629,7 +636,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.1",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
@@ -699,7 +706,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "µs"
         },
         "overrides": []
       },
@@ -743,6 +751,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "The free capacity of the queue used to pass events between the streamer and the main Kafka Connect loop.\n\n",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -786,7 +795,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.1",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {

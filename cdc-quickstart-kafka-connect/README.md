@@ -87,3 +87,27 @@ If you want to use your own custom connector to the docker image, be ready with 
 The docker compose command will bring up the containers for Prometheus and Grafana. Prometheus is accessible at port ```9090``` and Grafana is accessible at port ```3000```.
 
   **NOTE: To get metrics for multi-node clusters, you will have to add jobs corresponding to each node in the file** ```prometheus.yml```
+
+
+## Troubleshooting
+
+* __Unable to write to volumes.__
+
+  If your broker or zookeeper is unable to write to the volumes and gives error like
+  `Command [/usr/local/bin/dub path /var/lib/kafka/data writable] FAILED !`,
+  then make sure that the volumes directory are owned by your user and not by the `root`. To change the ownership you can run
+  ```
+    chown -R <user-name>:<user-name> kafka-data
+    chown -R <user-name>:<user-name> zookeeper/zookeeper_data
+    chown -R <user-name>:<user-name> zookeeper/zookeeper_log
+  ```
+
+* __ID mismatch in zookeeper and broker__
+
+  If you get an error saying _broker is trying to join the wrong cluster_ or _the cluster ID does not match stored cluster ID_
+  then, delete the contents stored in volumes and restart the containers.
+  ```
+    rm -rf kafka-data/*
+    rm -rf zookeeper/zookeeper_data/*
+    rm -rf zookeeper/zookeeper_log/*
+  ```

@@ -14,8 +14,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
       ALLOW_ANONYMOUS_LOGIN: "yes"
     volumes:
-      - ./zookeeper/zookeeper_data:/var/lib/zookeeper/data
-      - ./zookeeper/zookeeper_log:/var/lib/zookeeper/log
+      - ./zookeeper/zookeeper_data:/$HOME/var/lib/zookeeper/data
+      - ./zookeeper/zookeeper_log:/$HOME/var/lib/zookeeper/log
 
   broker:
     image: confluentinc/cp-server:7.2.1
@@ -51,7 +51,7 @@ services:
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
     volumes:
-      - ./kafka-data:/var/lib/kafka/data
+      - ./kafka-data:/$HOME/var/lib/kafka/data
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.2.1
