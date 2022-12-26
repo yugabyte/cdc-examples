@@ -33,6 +33,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "Change events sent by cdc service",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -125,6 +126,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "Ammount of data sent by cdc service",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -173,7 +175,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -217,6 +220,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "Server side lag. Calculated as timestamp of latest record in WAL minus the timestamp of last sent record.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -265,7 +269,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "µs"
         },
         "overrides": []
       },

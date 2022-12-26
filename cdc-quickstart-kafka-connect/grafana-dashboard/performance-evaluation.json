@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 5,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -33,6 +33,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "The total number of events that this connector has seen since the last start or metrics reset.\n\n",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -76,7 +77,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.6",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
@@ -98,6 +99,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "Data sent by cdc service",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -146,7 +148,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -190,6 +193,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "Change events sent by cdc service",
       "fieldConfig": {
         "defaults": {
           "color": {

@@ -14,8 +14,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
       ALLOW_ANONYMOUS_LOGIN: "yes"
     volumes:
-      - ./zookeeper/zookeeper_data:/var/lib/zookeeper/data
-      - ./zookeeper/zookeeper_log:/var/lib/zookeeper/log
+      - ./zookeeper/zookeeper_data:/$HOME/var/lib/zookeeper/data
+      - ./zookeeper/zookeeper_log:/$HOME/var/lib/zookeeper/log
 
   broker:
     image: confluentinc/cp-server:7.2.1
@@ -51,7 +51,7 @@ services:
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
     volumes:
-      - ./kafka-data:/var/lib/kafka/data
+      - ./kafka-data:/$HOME/var/lib/kafka/data
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.2.1
@@ -130,7 +130,7 @@ services:
       REST_ADVERTISED_HOST_NAME: kafka-connect
       CONNECT_REST_PORT: 8083
       KAFKA_JMX_PORT: '9876'
-      KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.9.jar=9876:/etc/jmx-exporter/metrics.yml"
+      KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.17.2.jar=9876:/etc/jmx-exporter/metrics.yml"
 
   pg:
     container_name: pg

@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -33,6 +33,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "Expiry time of stream",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -81,7 +82,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -217,6 +219,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "The current volume, in bytes, of records in the queue.\n\n",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -260,7 +263,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.6",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
@@ -282,6 +285,7 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "The free capacity of the queue used to pass events between the streamer and the main Kafka Connect loop.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -325,7 +329,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.6",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
