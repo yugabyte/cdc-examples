@@ -146,6 +146,8 @@ services:
       - 9090:9090
     image: prom/prometheus
     container_name: prometheus
+    environment:
+      NODE: ${NODE}
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
 
