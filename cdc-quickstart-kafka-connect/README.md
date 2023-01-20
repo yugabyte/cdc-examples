@@ -6,53 +6,65 @@ This repository contains simple steps to set up a YugabyteDB CDC pipeline to get
 The following example uses a PostgreSQL database as the sink database, which will be populated using a JDBC Sink Connector.
 
 1. Start YugabyteDB
-  This can be a local instance as well as a universe running on Yugabyte Anywhere. All you need is the IP of the nodes where the tserver and master processes are running.
-  ```sh
-  export NODE=<IP-OF-YOUR-NODE>
-  export MASTERS=<MASTER-ADDRESSES>
-  ```
+    This can be a local instance as well as a universe running on Yugabyte Anywhere. All you need is the IP of the nodes where the tserver and master processes are running.
+    ```sh
+    export NODE=<IP-OF-YOUR-NODE>
+    export MASTERS=<MASTER-ADDRESSES>
+    ```
+  
 2. Create a table
-  ```sql
-  CREATE TABLE employee (id INT PRIMARY KEY, first_name TEXT, last_name TEXT, dept_id SMALLINT);
-  ```
+    This example uses the [Retail Analytics](https://docs.yugabyte.com/preview/sample-data/retail-analytics/) dataset provided by Yugabyte. All the SQL scripts are also copied in this repository for the ease of use, to create the tables in the dataset, use the file 
+  
+    ```sql
+    \i scripts/schema.sql
+    ```
+  
 3. Create a stream ID using yb-admin
-  ```
-  ./yb-admin --master_addresses $MASTERS create_change_data_stream ysql.<namespace>
-  ```
+    ```
+    ./yb-admin --master_addresses $MASTERS create_change_data_stream ysql.<namespace>
+    ```
+  
 4. Start the docker containers
-  ```sh
-  docker-compose up
-  ```
+
+    ```sh
+    docker-compose up -d
+    ```
+  
 5. Deploy the source connector:
-  ```sh
-  curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d '{
-    "name": "ybconnector",
-    "config": {
-      "tasks.max":"1",
-      "connector.class": "io.debezium.connector.yugabytedb.YugabyteDBConnector",
-      "database.hostname":"'$NODE'",
-      "database.master.addresses":"'$MASTERS'",
-      "database.port":"5433",
-      "database.user": "yugabyte",
-      "database.password":"yugabyte",
-      "database.dbname":"yugabyte",
-      "database.server.name":"dbserver1",
-      "snapshot.mode":"never",
-      "database.streamid":"4a585fa40740459e907ff7fd67497869",
-      "table.include.list":"public.employee"
-    }
-  }'
-  ```
-  **Note: Change the parameters according to the scenario you're working on.**
+
+    ```sh
+    ./deploy-sources.sh <stream-id-created-in-step-3>
+    ```
+  
 6. Deploy the sink connector
-  ```sh
-  curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d @jdbc-sink-pg.json
-  ```
+    ```sh
+    ./deploy-sinks.sh
+    ```
+  
 7. To login to the PostgreSQL terminal, use:
-  ```sh
-  docker run --network=yb-cdc-demo_default -it --rm --name postgresqlterm --link pg:postgresql --rm postgres:11.2 sh -c 'PGPASSWORD=postgres exec psql -h pg -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres'
-  ```
-8. You can start performing operations on the source now and see them getting replicated in the PostgreSQL table.
+    ```sh
+    docker run --network=yb-cdc-demo_default -it --rm --name postgresqlterm --link pg:postgresql --rm postgres:11.2 sh -c 'PGPASSWORD=postgres exec psql -h pg -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres'
+    ```
+  
+8. To perform operations and insert data to the created tables, you can use other scripts bundled under scripts/
+    ```sql
+    \i scripts/products.sql;
+    \i scripts/users.sql;
+    \i scripts/orders.sql;
+    \i scripts/reviews.sql;
+    ```
+
+### Confluent Control Center
+
+The Confluent Control Center UI is also bundled as part of this example and once everything is running, it can be used to monitor the topics and the connect clusters, etc. The UI will be accessible at http://localhost:9021
+
+### Grafana
+
+You can also access grafana to view the metrics related to CDC and connectors, the dashboard is available at http://localhost:3000
+
+Use the username as `admin` and password as `admin` to login to the console.
+
+**Tip:** Use the `Kafka Connect Metrics Dashboard` to view the basic consolidated metrics at one place. You can start navigating around other dashboards if you need any particular metric.
 
 ## Adding your own connector to the image
 
