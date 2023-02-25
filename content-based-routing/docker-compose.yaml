@@ -132,15 +132,6 @@ services:
       KAFKA_JMX_PORT: '9876'
       KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.17.2.jar=9876:/etc/jmx-exporter/metrics.yml"
 
-  pg:
-    container_name: pg
-    image: debezium/example-postgres:1.7
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-
   prometheus:
     ports:
       - 9090:9090

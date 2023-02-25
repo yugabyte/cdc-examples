@@ -1,11 +1,10 @@
-CREATE TABLE products(
+CREATE TABLE users(
   id         bigserial PRIMARY KEY,
   created_at timestamp,
-  category   text,
-  ean        text,
-  price      float,
-  quantity   int default(5000),
-  rating     float,
-  title      text,
-  vendor     text
+  name       text,
+  email      text,
+  birth_date text,
+  country    text,
+  password   text,
+  source     text
 );

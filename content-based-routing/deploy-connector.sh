@@ -12,7 +12,7 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
     "database.server.name":"ybconnector",
     "snapshot.mode":"initial",
     "database.streamid":"'$1'",
-    "table.include.list":"public.products",
+    "table.include.list":"public.users",
     "key.converter":"io.confluent.connect.avro.AvroConverter",
     "key.converter.schema.registry.url":"http://schema-registry:8081",
     "value.converter":"io.confluent.connect.avro.AvroConverter",
@@ -20,7 +20,7 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
     "transforms":"route",
     "transforms.route.type":"io.debezium.transforms.ContentBasedRouter",
     "transforms.route.language":"jsr223.groovy",
-    "transforms.route.topic.expression":"value.op == '\''c'\'' ? '\''create_events'\'' : null"
+    "transforms.route.topic.expression":"value.after != null ? (value.after?.country?.value == '\''UK'\'' ? '\''uk_users'\'' : null) : (value.before?.country?.value == '\''UK'\'' ? '\''uk_users'\'' : null)"
   }
 }'
 
