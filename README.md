@@ -11,3 +11,4 @@ Example Pipelines for Yugabyte CDC.
 |[Iceberg on S3](iceberg/README.md)|Write records to Amazon S3 using Iceberg Table Format|
 |[Iceberg with TPCC](iceberg-with-tpcc/README.md)|Write records to Amazon S3 with TPCC workload and before image enabled|
 |[Use a Single Kafka Topic](single-topic/README.md)|Use a Single topic for multiple tables for CDC|
+|[Content Based Routing](content-based-routing/README.md)|Re-route CDC events to different kafka topics based on the event content|
