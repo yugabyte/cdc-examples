@@ -133,7 +133,7 @@ The docker compose command will bring up the containers for Prometheus and Grafa
     rm -rf zookeeper/zookeeper_log/*
   ```
 
-* __Unable to deploy connectors locally__
+* __Unable to deploy connectors locally on MacOS__
 
   If the command to deploy source connectors (`./deploy-sources.sh <stream-id-created-in-step-3>`) is failing, given you're using docker on MacOS and trying to connect to yugabyteDB instance that is deployed on your local network, it is happening probably because your docker containers are unable to access your local network. You can install something like [docker-mac-net-connect](https://github.com/chipmk/docker-mac-net-connect) to fix this issue.
 
