@@ -141,4 +141,3 @@ The docker compose command will bring up the containers for Prometheus and Grafa
     brew install chipmk/tap/docker-mac-net-connect
     sudo brew services start chipmk/tap/docker-mac-net-connect
   ```
-
