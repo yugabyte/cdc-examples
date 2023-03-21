@@ -167,7 +167,7 @@ In the following example, we'll setup cdc with a kafka cluster that has authoriz
 
 7. To login to the PostgreSQL terminal, use:
     ```sh
-    docker run --network=yb-cdc-demo_default -it --rm --name postgresqlterm --link pg:postgresql --rm postgres:11.2 sh -c 'PGPASSWORD=postgres exec psql -h pg -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres'
+    docker run --network=authorization_default -it --rm --name postgresqlterm --link pg:postgresql --rm postgres:11.2 sh -c 'PGPASSWORD=postgres exec psql -h pg -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres'
     ```
 
 8. To perform operations and insert data to the created tables, you can use other scripts bundled under scripts/
