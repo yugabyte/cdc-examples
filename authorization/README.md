@@ -71,12 +71,14 @@ Users `source_connector` and `sink_connector` will be used by the source and sin
 
 If you're using the examples in this repository. You can use the following commands to give the required permissions.
 
+Note: You need to give `Create` permissions to sink connectors because they'll creating the topic if it doesn't exist already.
+
 ```bash
 # Source connectors
 ./bin/kafka-acls.sh --bootstrap-server localhost:9092 --command-config ./admin.properties --add --allow-principal User:source_connector --operation 'Write' --operation 'Create' --operation 'Describe' --topic 'ybconnector' --resource-pattern-type 'PREFIXED'
 
 # Sink connectors
-./bin/kafka-acls.sh --bootstrap-server localhost:9092 --command-config ./admin.properties --add --allow-principal User:sink_connector --operation 'Read' --operation 'Describe' --topic 'ybconnector' --resource-pattern-type 'PREFIXED'
+./bin/kafka-acls.sh --bootstrap-server localhost:9092 --command-config ./admin.properties --add --allow-principal User:sink_connector --operation 'Create' --operation 'Read' --operation 'Describe' --topic 'ybconnector' --resource-pattern-type 'PREFIXED'
 ./bin/kafka-acls.sh --bootstrap-server localhost:9092 --command-config ./admin.properties --add --allow-principal User:sink_connector --operation 'Read' --group 'connect' --resource-pattern-type 'PREFIXED'
 ```
 
@@ -150,7 +152,7 @@ In the following example, we'll setup cdc with a kafka cluster that has authoriz
     ./bin/kafka-acls.sh --bootstrap-server localhost:9092 --command-config ./admin.properties --add --allow-principal User:source_connector --operation 'Write' --operation 'Create' --operation 'Describe' --topic 'ybconnector' --resource-pattern-type 'PREFIXED'
 
     # sink_connector
-    ./bin/kafka-acls.sh --bootstrap-server localhost:9092 --command-config ./admin.properties --add --allow-principal User:sink_connector --operation 'Read' --operation 'Describe' --topic 'ybconnector' --resource-pattern-type 'PREFIXED'
+    ./bin/kafka-acls.sh --bootstrap-server localhost:9092 --command-config ./admin.properties --add --allow-principal User:sink_connector --operation 'Create' --operation 'Read' --operation 'Describe' --topic 'ybconnector' --resource-pattern-type 'PREFIXED'
     ./bin/kafka-acls.sh --bootstrap-server localhost:9092 --command-config ./admin.properties --add --allow-principal User:sink_connector --operation 'Read' --group 'connect' --resource-pattern-type 'PREFIXED'
     ```
 
