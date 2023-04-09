@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "com.example.protobuftest.proto";
+option java_outer_classname = "UserProto";
+
+enum Source {
+  UNKNOWN = 0;
+  LINKEDIN = 1;
+  TWITTER = 2;
+}
+
+message User {
+  string name = 1;
+  string email = 2;
+  string address = 3;
+  string birth_date = 4;
+  Source source = 5;
+}
