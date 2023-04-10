@@ -1,5 +1,5 @@
 # Protobuf Binary Data
-[Protocol Buffers](https://protobuf.dev) are Google’s language-neutral, platform-neutral, extensible mechanism for serializing structured data. One of the key features protocol buffers (or protobuf) is that it can encode the messages to binary format having really small sizes.
+[Protocol Buffers](https://protobuf.dev) are Google’s language-neutral, platform-neutral, extensible mechanism for serializing structured data. One of the key features of protocol buffers (or protobuf) is that it can encode the messages to binary format having really small sizes.
 
 This example contains simple steps on how you can leverage the `bytea` field to store the Protobuf binary data and setup a YugabyteDB CDC Connector that streams the changes to a kafka topic.
 
