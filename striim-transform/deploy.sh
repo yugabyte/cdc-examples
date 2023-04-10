@@ -16,7 +16,7 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
     "database.streamid":"'$1'",
     "table.include.list":"public.users",
     "new.table.poll.interval.ms":"5000",
-    "transforms": "unwrap",
-    "transforms.unwrap.type": "io.debezium.connector.yugabytedb.transforms.StriimCompatible"
+    "transforms": "striim",
+    "transforms.striim.type": "io.debezium.connector.yugabytedb.transforms.StriimCompatible"
   }
 }'
