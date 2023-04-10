@@ -13,8 +13,7 @@ Also, we'll run a [consumer](./consumer/) that reads the messages from kafka and
     export MASTERS=<MASTER-ADDRESSES>
     ```
 
-2. Create a table
-    To create the required table for this example, use the file
+2. To create the required table for this example, use the file
 
     ```sql
     \i scripts/schema.sql
@@ -33,7 +32,7 @@ Also, we'll run a [consumer](./consumer/) that reads the messages from kafka and
 
 5. Deploy the source connectors
 
-    We have created two connector configurations which use `avro` and `json` as kafka serialization formats respectively.
+    We have two connector configurations which use `avro` and `json` as kafka serialization formats respectively.
 
     To deploy a connector with `avro` serialization, run the following.
 
