@@ -46,6 +46,12 @@ Also, we'll run a [consumer](./consumer/) that reads the messages from kafka and
     ./deploy-json.sh <stream-id-created-in-step-3>
     ```
 
+    NOTE: By default,, the connector sends binary data as bytes to kafka. This behavior can be changed by specifying the `binary.handling.mode` property in the connector configuration. There are three valid values that can be used for this property.
+    - **bytes** - Sends the binary data as bytes.
+    - **hex** - Sends the binary data as a hexadecimal string.
+    - **base64** - Sends the binary data as a base64 encoded string.
+
+
 6. Build and run the consumer
 
     We have created a [consumer](./consumer/) for demonstration purposes. First we'll need to build it.
