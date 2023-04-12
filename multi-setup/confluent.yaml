@@ -1,27 +1,25 @@
-version: "3"
+---
+version: '2'
 services:
   zookeeper:
-    container_name: zookeeper
     image: confluentinc/cp-zookeeper:7.2.1
-    user: "1000"
+    hostname: zookeeper
+    container_name: zookeeper
+    user: ${USERID}
     ports:
-      - 2181:2181
-      - 2888:2888
-      - 3888:3888
-    restart: unless-stopped
+      - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ALLOW_ANONYMOUS_LOGIN: "yes"
     volumes:
-      - ./zookeeper/zookeeper_data:/$HOME/var/lib/zookeeper/data
-      - ./zookeeper/zookeeper_log:/$HOME/var/lib/zookeeper/log
+      - $PWD/volumes/kafka/zk-data:/var/lib/zookeeper/data
 
   broker:
     image: confluentinc/cp-server:7.2.1
     hostname: broker
     container_name: broker
-    user: "1000"
+    user: ${USERID}
     depends_on:
       - zookeeper
     ports:
@@ -32,8 +30,9 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_ADVERTISED_LISTENERS: "CLIENT://broker:29092,EXTERNAL://localhost:9092,FARAWAY://broker:19092"
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT,FARAWAY:PLAINTEXT"
+      KAFKA_LISTENERS: ""  
+      KAFKA_ADVERTISED_LISTENERS: "CLIENT://broker:29092,EXTERNAL://localhost:9092,FARAWAY://${KAFKA_HOST}"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT,FARAWAY:PLAINTEXT,PLAINTEXT:PLAINTEXT"
       KAFKA_INTER_BROKER_LISTENER_NAME: CLIENT
       ALLOW_PLAINTEXT_LISTENER: "yes"
       KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
@@ -51,7 +50,7 @@ services:
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
     volumes:
-      - ./kafka-data:/$HOME/var/lib/kafka/data
+      - $PWD/volumes/kafka/kafka-data:/var/lib/kafka/data
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.2.1
@@ -73,13 +72,13 @@ services:
     depends_on:
       - broker
       - schema-registry
-      - kafka-connect
+      - connect
       - ksqldb-server
     ports:
       - "9021:9021"
     environment:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
-      CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: 'kafka-connect:8083'
+      CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: 'connect:8083'
       CONTROL_CENTER_KSQL_KSQLDB1_URL: "http://ksqldb-server:8088"
       CONTROL_CENTER_KSQL_KSQLDB1_ADVERTISED_URL: "http://localhost:8088"
       CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
@@ -95,7 +94,7 @@ services:
     container_name: ksqldb-server
     depends_on:
       - broker
-      - kafka-connect
+      - connect
     ports:
       - "8088:8088"
     environment:
@@ -107,57 +106,22 @@ services:
       KSQL_KSQL_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
       KSQL_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
       KSQL_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
-      KSQL_KSQL_CONNECT_URL: "http://kafka-connect:8083"
+      KSQL_KSQL_CONNECT_URL: "http://connect:8083"
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
       KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
 
-  kafka-connect:
-    image: quay.io/yugabyte/debezium-connector:latest
-    container_name: kafka-connect
-    depends_on: [ zookeeper, broker ]
+  rest-proxy:
+    image: confluentinc/cp-kafka-rest:7.2.1
+    depends_on:
+      - broker
+      - schema-registry
     ports:
-      - 8083:8083
-      - 9876:9876
-    restart: unless-stopped
+      - 8082:8082
+    hostname: rest-proxy
+    container_name: rest-proxy
     environment:
-      BOOTSTRAP_SERVERS: "broker:19092"
-      GROUP_ID: 1
-      CONFIG_STORAGE_TOPIC: kafka-connect_configs
-      OFFSET_STORAGE_TOPIC: kafka-connect_offset
-      STATUS_STORAGE_TOPIC: kafka-connect_status
-      HOST_NAME: "0.0.0.0"
-      REST_ADVERTISED_HOST_NAME: kafka-connect
-      CONNECT_REST_PORT: 8083
-      KAFKA_JMX_PORT: '9876'
-      KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.17.2.jar=9876:/etc/jmx-exporter/metrics.yml"
-
-  pg:
-    container_name: pg
-    image: debezium/example-postgres:1.7
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-
-  prometheus:
-    ports:
-      - 9090:9090
-    image: prom/prometheus
-    container_name: prometheus
-    environment:
-      NODE: ${NODE}
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-
-  grafana:
-    build:
-      context: ./grafana-dashboard
-    container_name: grafana
-    ports:
-      - 3000:3000
-    links:
-      - prometheus
-    environment:
-      - DS_PROMETHEUS=prometheus
+      KAFKA_REST_HOST_NAME: rest-proxy
+      KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
+      KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
+      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'

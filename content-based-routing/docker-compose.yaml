@@ -113,7 +113,7 @@ services:
       KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
 
   kafka-connect:
-    image: quay.io/yugabyte/debezium-connector:latest
+    image: yugabyte-debezium-connector-cbr
     container_name: kafka-connect
     depends_on: [ zookeeper, broker ]
     ports:
@@ -132,15 +132,6 @@ services:
       KAFKA_JMX_PORT: '9876'
       KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.17.2.jar=9876:/etc/jmx-exporter/metrics.yml"
 
-  pg:
-    container_name: pg
-    image: debezium/example-postgres:1.7
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-
   prometheus:
     ports:
       - 9090:9090
@@ -150,14 +141,3 @@ services:
       NODE: ${NODE}
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-
-  grafana:
-    build:
-      context: ./grafana-dashboard
-    container_name: grafana
-    ports:
-      - 3000:3000
-    links:
-      - prometheus
-    environment:
-      - DS_PROMETHEUS=prometheus

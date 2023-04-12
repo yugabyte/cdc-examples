@@ -1,0 +1,15 @@
+global:
+ scrape_interval: 3s
+ evaluation_interval: 3s
+scrape_configs:
+
+ - job_name: 'kafka-connect-host'
+   static_configs:
+   - targets: ['kafka-connect:9876']
+
+ - job_name: 'yugabyted'
+   metrics_path: '/prometheus-metrics'
+   static_configs:
+   - targets: ['${PG_HOST}:9000']
+
+# Add more jobs here to get metrics from multiple nodes

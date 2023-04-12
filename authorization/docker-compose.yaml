@@ -12,7 +12,7 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-      ALLOW_ANONYMOUS_LOGIN: "yes"
+      ZOOKEEPER_SASL_ENABLED: "false"
     volumes:
       - ./zookeeper/zookeeper_data:/$HOME/var/lib/zookeeper/data
       - ./zookeeper/zookeeper_log:/$HOME/var/lib/zookeeper/log
@@ -32,9 +32,15 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      ZOOKEEPER_SASL_ENABLED: "false"
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
       KAFKA_ADVERTISED_LISTENERS: "CLIENT://broker:29092,EXTERNAL://localhost:9092,FARAWAY://broker:19092"
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT,FARAWAY:PLAINTEXT"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CLIENT:SASL_PLAINTEXT,EXTERNAL:SASL_PLAINTEXT,FARAWAY:SASL_PLAINTEXT"
       KAFKA_INTER_BROKER_LISTENER_NAME: CLIENT
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: PLAIN
+      KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
+      KAFKA_SUPER_USERS: User:admin
       ALLOW_PLAINTEXT_LISTENER: "yes"
       KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -52,6 +58,7 @@ services:
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
     volumes:
       - ./kafka-data:/$HOME/var/lib/kafka/data
+      - ./kafka_server_jaas.conf:/etc/kafka/kafka_server_jaas.conf
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.2.1
@@ -63,8 +70,14 @@ services:
       - "8081:8081"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker:29092'
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'SASL_PLAINTEXT://broker:29092'
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      SCHEMA_REGISTRY_KAFKASTORE_SASL_MECHANISM: PLAIN
+      SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_client_jaas.conf"
+      SCHEMA_REGISTRY_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_client_jaas.conf"
+    volumes:
+      - ./kafka_client_jaas.conf:/etc/kafka/kafka_client_jaas.conf
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:7.2.1
@@ -78,7 +91,7 @@ services:
     ports:
       - "9021:9021"
     environment:
-      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'SASL_PLAINTEXT://broker:29092'
       CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: 'kafka-connect:8083'
       CONTROL_CENTER_KSQL_KSQLDB1_URL: "http://ksqldb-server:8088"
       CONTROL_CENTER_KSQL_KSQLDB1_ADVERTISED_URL: "http://localhost:8088"
@@ -88,6 +101,12 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
+      CONTROL_CENTER_STREAMS_SASL_MECHANISM: PLAIN
+      CONTROL_CENTER_STREAMS_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_client_jaas.conf"
+      CONTROL_CENTER_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_client_jaas.conf"
+    volumes:
+      - ./kafka_client_jaas.conf:/etc/kafka/kafka_client_jaas.conf
 
   ksqldb-server:
     image: confluentinc/cp-ksqldb-server:7.2.1
@@ -100,7 +119,7 @@ services:
       - "8088:8088"
     environment:
       KSQL_CONFIG_DIR: "/etc/ksql"
-      KSQL_BOOTSTRAP_SERVERS: "broker:29092"
+      KSQL_BOOTSTRAP_SERVERS: "SASL_PLAINTEXT://broker:29092"
       KSQL_HOST_NAME: ksqldb-server
       KSQL_LISTENERS: "http://0.0.0.0:8088"
       KSQL_CACHE_MAX_BYTES_BUFFERING: 0
@@ -111,6 +130,12 @@ services:
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
       KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
+      KSQL_SASL_MECHANISM: PLAIN
+      KSQL_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_client_jaas.conf"
+      KSQL_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_client_jaas.conf"
+    volumes:
+      - ./kafka_client_jaas.conf:/etc/kafka/kafka_client_jaas.conf
 
   kafka-connect:
     image: quay.io/yugabyte/debezium-connector:latest
@@ -121,7 +146,7 @@ services:
       - 9876:9876
     restart: unless-stopped
     environment:
-      BOOTSTRAP_SERVERS: "broker:19092"
+      BOOTSTRAP_SERVERS: "SASL_PLAINTEXT://broker:19092"
       GROUP_ID: 1
       CONFIG_STORAGE_TOPIC: kafka-connect_configs
       OFFSET_STORAGE_TOPIC: kafka-connect_offset
@@ -131,6 +156,14 @@ services:
       CONNECT_REST_PORT: 8083
       KAFKA_JMX_PORT: '9876'
       KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.17.2.jar=9876:/etc/jmx-exporter/metrics.yml"
+      CONNECT_SASL_MECHANISM: PLAIN
+      CONNECT_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      CONNECT_SASL_JAAS_CONFIG: org.apache.kafka.common.security.plain.PlainLoginModule required username="connect_worker" password="connect-secret";
+      CONNECT_PRODUCER_SASL_MECHANISM: PLAIN
+      CONNECT_PRODUCER_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      CONNECT_CONSUMER_SASL_MECHANISM: PLAIN
+      CONNECT_CONSUMER_SECURITY_PROTOCOL: SASL_PLAINTEXT
+      CONNECT_CONNECTOR_CLIENT_CONFIG_OVERRIDE_POLICY: Principal
 
   pg:
     container_name: pg
@@ -150,14 +183,3 @@ services:
       NODE: ${NODE}
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-
-  grafana:
-    build:
-      context: ./grafana-dashboard
-    container_name: grafana
-    ports:
-      - 3000:3000
-    links:
-      - prometheus
-    environment:
-      - DS_PROMETHEUS=prometheus

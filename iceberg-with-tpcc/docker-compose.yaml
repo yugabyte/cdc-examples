@@ -13,9 +13,6 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ALLOW_ANONYMOUS_LOGIN: "yes"
-    volumes:
-      - ./zookeeper/zookeeper_data:/$HOME/var/lib/zookeeper/data
-      - ./zookeeper/zookeeper_log:/$HOME/var/lib/zookeeper/log
 
   broker:
     image: confluentinc/cp-server:7.2.1
@@ -50,21 +47,6 @@ services:
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
-    volumes:
-      - ./kafka-data:/$HOME/var/lib/kafka/data
-
-  schema-registry:
-    image: confluentinc/cp-schema-registry:7.2.1
-    hostname: schema-registry
-    container_name: schema-registry
-    depends_on:
-      - broker
-    ports:
-      - "8081:8081"
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker:29092'
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:7.2.1
@@ -89,31 +71,23 @@ services:
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
 
-  ksqldb-server:
-    image: confluentinc/cp-ksqldb-server:7.2.1
-    hostname: ksqldb-server
-    container_name: ksqldb-server
+  rest-proxy:
+    image: confluentinc/cp-kafka-rest:7.2.1
     depends_on:
       - broker
-      - kafka-connect
+      - schema-registry
     ports:
-      - "8088:8088"
+      - 8082:8082
+    hostname: rest-proxy
+    container_name: rest-proxy
     environment:
-      KSQL_CONFIG_DIR: "/etc/ksql"
-      KSQL_BOOTSTRAP_SERVERS: "broker:29092"
-      KSQL_HOST_NAME: ksqldb-server
-      KSQL_LISTENERS: "http://0.0.0.0:8088"
-      KSQL_CACHE_MAX_BYTES_BUFFERING: 0
-      KSQL_KSQL_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
-      KSQL_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
-      KSQL_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
-      KSQL_KSQL_CONNECT_URL: "http://kafka-connect:8083"
-      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
-      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
-      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
+      KAFKA_REST_HOST_NAME: rest-proxy
+      KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
+      KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
+      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
 
   kafka-connect:
-    image: quay.io/yugabyte/debezium-connector:latest
+    image: connect-with-iceberg:latest
     container_name: kafka-connect
     depends_on: [ zookeeper, broker ]
     ports:
@@ -130,24 +104,16 @@ services:
       REST_ADVERTISED_HOST_NAME: kafka-connect
       CONNECT_REST_PORT: 8083
       KAFKA_JMX_PORT: '9876'
-      KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.17.2.jar=9876:/etc/jmx-exporter/metrics.yml"
-
-  pg:
-    container_name: pg
-    image: debezium/example-postgres:1.7
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.9.jar=9876:/etc/jmx-exporter/metrics.yml"
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
 
   prometheus:
     ports:
       - 9090:9090
     image: prom/prometheus
     container_name: prometheus
-    environment:
-      NODE: ${NODE}
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
 
