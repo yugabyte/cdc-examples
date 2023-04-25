@@ -111,9 +111,9 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "builder",
-          "expr": "sum by(tablet) (debezium_metrics_totalnumberofeventsseen{context=\"streaming\"})",
+          "expr": "sum by(partition) (debezium_metrics_totalnumberofeventsseen{context=\"streaming\"})",
           "hide": false,
-          "legendFormat": "count for {{tablet}}",
+          "legendFormat": "count for {{partition}}",
           "range": true,
           "refId": "A"
         },
@@ -124,17 +124,17 @@
           },
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "sum by(tablet) (rate(debezium_metrics_totalnumberofeventsseen{context=\"streaming\"}[$__rate_interval]))",
+          "expr": "sum by(partition) (rate(debezium_metrics_totalnumberofeventsseen{context=\"streaming\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "",
-          "legendFormat": "rate for {{tablet}}",
+          "legendFormat": "rate for {{partition}}",
           "range": true,
           "refId": "B"
         }
       ],
-      "title": "debezium_metrics_totalnumberofeventsseen aggregated on tablet level",
+      "title": "debezium_metrics_totalnumberofeventsseen aggregated on partition level",
       "type": "timeseries"
     },
     {
