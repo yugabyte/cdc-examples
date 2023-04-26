@@ -7,5 +7,5 @@ WORKDIR /app
 COPY --from=0 /app/kafka-connect-iceberg-sink /app
 RUN mvn -ntp clean package -DskipTests
 
-FROM quay.io/yugabyte/debezium-connector:1.7.0.13-BETA
+FROM quay.io/yugabyte/debezium-connector:1.9.5.y.15
 COPY --from=1 /app/target/kafka-connect-*shaded.jar /kafka/connect

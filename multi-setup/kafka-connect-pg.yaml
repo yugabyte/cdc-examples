@@ -21,7 +21,7 @@ services:
   
   pg:
     container_name: pg
-    image: debezium/example-postgres:1.7
+    image: debezium/example-postgres:1.9.5.Final
     ports:
       - 5432:5432
     environment:
