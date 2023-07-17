@@ -64,13 +64,16 @@ The following example uses a PostgreSQL database as the sink database, which wil
     ```
 
     #### Key considerations
-    To aide the streaming of the records transactionally and atomically, we've made some changes to the way the sink connector reads and inserts records in the target database. As mentioned above, we also publish the transaction metadata to the topic i.e. `BEGIN` and `END` records, so now as soon as the connector reads a `BEGIN` record, it starts to aggregate records until it sees a `END` record, once it reads an `END` record, it executes all the aggregated records in a single transaction, thus maintaining atomicity. The following sink configuration parameters have been added:
+
+    To aide the streaming of the records transactionally and atomically, we've made some changes ([10.6.5-CUSTOM](https://github.com/yugabyte/kafka-connect-jdbc/releases/tag/10.6.5-CUSTOM)) to the way the sink connector reads and inserts records in the target database. As mentioned above, we also publish the transaction metadata to the topic i.e. `BEGIN` and `END` records, so now as soon as the connector reads a `BEGIN` record, it starts to aggregate records until it sees a `END` record, once it reads an `END` record, it executes all the aggregated records in a single transaction, thus maintaining atomicity. The following sink configuration parameters have been added:
 
     | Config property | Default | Description |
     | :--- | :--- | :--- |
     | `consistent.writes` | `false` | Whether to write transactionally and atomically |
     | `table.identifier.field` (Optional) | `__dbz_physicalTableIdentifier` | The extra field added by the transformer `ByLogicalTableRouter` |
     | `remove.table.identifier.field` (Optional) | `true` | Whether to remove the table identifier field |
+
+    **Note:** The above mentioned sink connector changes are meant for testing purposes only - they are strictly not meant for distribution.
   
 7. To login to the PostgreSQL terminal, use:
     
