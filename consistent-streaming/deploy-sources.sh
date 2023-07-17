@@ -22,6 +22,7 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
     "transforms.Reroute.topic.replacement":"dbserver1_all_events",
     "transforms.Reroute.type":"io.debezium.transforms.ByLogicalTableRouter",
     "transforms.Reroute.key.field.regex":"dbserver1.public.(.*)",
-    "transforms.Reroute.key.field.replacement":"$1"
+    "transforms.Reroute.key.field.replacement":"$1",
+    "provide.transaction.metadata":"true"
   }
 }'
