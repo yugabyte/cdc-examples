@@ -43,6 +43,14 @@ The following example uses a PostgreSQL database as the sink database, which wil
     ```sh
     ./deploy-sources.sh 65a857d957f34507aa4fd97ebcb6ff56 public.department,public.employee
     ```
+
+    #### Key considerations
+    The following configuration properties are of key importance while deploying the source connector:
+
+    | Config property | Default | Description |
+    | :--- | :--- | :--- |
+    | `provide.transaction.metadata` | `false` | Send metadata related to transaction boundaries |
+    | `transaction.ordering` | `false` | Whether to sort transactions in connector |
   
 6. Deploy the sink connector
     
