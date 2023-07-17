@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# Deploy connector 1
+echo "Deploying source connector with stream ID $1 and table.include.list=$2"
+
 curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d '{
   "name": "ybconnector1",
   "config": {
