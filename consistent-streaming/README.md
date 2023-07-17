@@ -45,7 +45,12 @@ The following example uses a PostgreSQL database as the sink database, which wil
     ```
 
     #### Key considerations
-    The following configuration properties are of key importance while deploying the source connector:
+
+    This example has the source connector configuration where we are using a transformer to route all the messages to a common topic i.e. by using the [ByLogicalTableRouter](https://debezium.io/documentation/reference/stable/transformations/topic-routing.html) - this is required in order to make sure that while reading the records, the sink connectors have only a single source of data, otherwise it would be very complicated to maintain records in a consistent order.
+
+    We also publish the transaction metadata to this common topic where all the records are being routed, this metadata consists of `BEGIN` and `END` records marking the status of a transaction.
+
+    Additionally, the following configuration properties are of key importance while deploying the source connector:
 
     | Config property | Default | Description |
     | :--- | :--- | :--- |
@@ -59,7 +64,7 @@ The following example uses a PostgreSQL database as the sink database, which wil
     ```
 
     #### Key considerations
-    To aide the streaming of the records transactionally and atomically, we have added the following sink configuration parameters:
+    To aide the streaming of the records transactionally and atomically, we've made some changes to the way the sink connector reads and inserts records in the target database. As mentioned above, we also publish the transaction metadata to the topic i.e. `BEGIN` and `END` records, so now as soon as the connector reads a `BEGIN` record, it starts to aggregate records until it sees a `END` record, once it reads an `END` record, it executes all the aggregated records in a single transaction, thus maintaining atomicity. The following sink configuration parameters have been added:
 
     | Config property | Default | Description |
     | :--- | :--- | :--- |
