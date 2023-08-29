@@ -15,3 +15,4 @@ Example Pipelines for Yugabyte CDC.
 |[Authorization](authorization/README.md)|Setup CDC with a kafka cluster that has authentication and authorization enabled|
 |[Striim Compatible Transform](striim-transform/README.md)|Transform the connector records to be compatible with Striim|
 |[Protobuf Binary Data](protobuf-binary-data/)|Setup CDC on a table that stores protobuf message in binary and re-create the message from binary data in other microservice that reads from kafka|
+|[Debezium Engine App](debezium-engine-app)| A Java App that prints change events from Yugabyte DB|
