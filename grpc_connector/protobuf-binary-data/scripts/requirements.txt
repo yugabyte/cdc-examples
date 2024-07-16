@@ -1,0 +1,5 @@
+Faker==18.4.0
+protobuf==4.22.1
+psycopg2==2.9.6
+python-dateutil==2.8.2
+six==1.16.0
