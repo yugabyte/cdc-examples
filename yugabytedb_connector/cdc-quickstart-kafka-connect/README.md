@@ -17,35 +17,30 @@ The following example uses a PostgreSQL database as the sink database, which wil
     ```sql
     \i scripts/schema.sql
     ```
-  
-3. Create a stream ID using yb-admin
-    ```
-    ./yb-admin --master_addresses $MASTERS create_change_data_stream ysql.<namespace>
-    ```
-  
-4. Start the docker containers
+
+3. Start the docker containers
 
     ```sh
     docker-compose up -d
     ```
   
-5. Deploy the source connector:
+4. Deploy the source connector:
 
     ```sh
     ./deploy-sources.sh
     ```
   
-6. Deploy the sink connector
+5. Deploy the sink connector
     ```sh
     ./deploy-sinks.sh
     ```
   
-7. To login to the PostgreSQL terminal, use:
+6. To login to the PostgreSQL terminal, use:
     ```sh
     docker run --network=cdc-quickstart-kafka-connect_default -it --rm --name postgresqlterm --link pg:postgresql --rm postgres:11.2 sh -c 'PGPASSWORD=postgres exec psql -h pg -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres'
     ```
   
-8. To perform operations and insert data to the created tables, you can use other scripts bundled under scripts/
+7. To perform operations and insert data to the created tables, you can use other scripts bundled under scripts/
     ```sql
     \i scripts/products.sql;
     \i scripts/users.sql;
