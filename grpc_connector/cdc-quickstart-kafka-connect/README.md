@@ -102,7 +102,7 @@ The docker compose command will bring up the containers for Prometheus and Grafa
   
  Kafka Connect Metrics Dashboard has all the basic metrics arranged in corresponding pannels. Here are some of the screenshots of this dashboard:
  
- * ![](screenshots/1%20.png)
+ * ![](screenshots/1.png)
  * ![](screenshots/2.png)
  * ![](screenshots/3.png)
  * ![](screenshots/4.png)
