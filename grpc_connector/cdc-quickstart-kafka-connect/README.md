@@ -102,13 +102,13 @@ The docker compose command will bring up the containers for Prometheus and Grafa
   
  Kafka Connect Metrics Dashboard has all the basic metrics arranged in corresponding pannels. Here are some of the screenshots of this dashboard:
  
- * ![](https://github.com/yugabyte/cdc-examples/blob/main/cdc-quickstart-kafka-connect/screenshots/1%20.png)
- * ![](https://github.com/yugabyte/cdc-examples/blob/main/cdc-quickstart-kafka-connect/screenshots/2.png)
- * ![](https://github.com/yugabyte/cdc-examples/blob/main/cdc-quickstart-kafka-connect/screenshots/3.png)
- * ![](https://github.com/yugabyte/cdc-examples/blob/main/cdc-quickstart-kafka-connect/screenshots/4.png)
- * ![](https://github.com/yugabyte/cdc-examples/blob/main/cdc-quickstart-kafka-connect/screenshots/5.png)
- * ![](https://github.com/yugabyte/cdc-examples/blob/main/cdc-quickstart-kafka-connect/screenshots/6.png)
- * ![](https://github.com/yugabyte/cdc-examples/blob/main/cdc-quickstart-kafka-connect/screenshots/7.png)
+ * ![](screenshots/1.png)
+ * ![](screenshots/2.png)
+ * ![](screenshots/3.png)
+ * ![](screenshots/4.png)
+ * ![](screenshots/5.png)
+ * ![](screenshots/6.png)
+ * ![](screenshots/7.png)
 
 ## Troubleshooting
 
