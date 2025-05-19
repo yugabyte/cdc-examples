@@ -113,7 +113,7 @@ services:
       KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
 
   kafka-connect:
-    image: quay.io/yugabyte/ybdb-debezium:dz.2.5.2.yb.2024.2
+    image: quay.io/yugabyte/ybdb-debezium:dz.2.5.2.yb.2024.2.3
     container_name: kafka-connect
     depends_on: [ zookeeper, broker ]
     ports:
