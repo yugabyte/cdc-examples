@@ -31,7 +31,7 @@ services:
       - 19092:19092
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_ADVERTISED_LISTENERS: "CLIENT://broker:29092,EXTERNAL://localhost:9092,FARAWAY://broker:19092"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT,FARAWAY:PLAINTEXT"
       KAFKA_INTER_BROKER_LISTENER_NAME: CLIENT
@@ -48,8 +48,8 @@ services:
       KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker:29092
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
-      CONFLUENT_METRICS_ENABLE: 'true'
-      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+      CONFLUENT_METRICS_ENABLE: "true"
+      CONFLUENT_SUPPORT_CUSTOMER_ID: "anonymous"
     volumes:
       - ./kafka-data:/$HOME/var/lib/kafka/data
 
@@ -63,7 +63,7 @@ services:
       - "8081:8081"
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker:29092'
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "broker:29092"
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
   control-center:
@@ -78,8 +78,8 @@ services:
     ports:
       - "9021:9021"
     environment:
-      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
-      CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: 'kafka-connect:8083'
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: "broker:29092"
+      CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER: "kafka-connect:8083"
       CONTROL_CENTER_KSQL_KSQLDB1_URL: "http://ksqldb-server:8088"
       CONTROL_CENTER_KSQL_KSQLDB1_ADVERTISED_URL: "http://localhost:8088"
       CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
@@ -109,13 +109,13 @@ services:
       KSQL_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
       KSQL_KSQL_CONNECT_URL: "http://kafka-connect:8083"
       KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
-      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
-      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: "true"
+      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: "true"
 
   kafka-connect:
-    image: quay.io/yugabyte/ybdb-debezium:dz.2.5.2.yb.2024.2.SNAPSHOT.4
+    image: quay.io/yugabyte/ybdb-debezium:dz.2.5.2.yb.2024.2.3
     container_name: kafka-connect
-    depends_on: [ zookeeper, broker ]
+    depends_on: [zookeeper, broker]
     ports:
       - 8083:8083
       - 9876:9876
@@ -131,7 +131,7 @@ services:
       HOST_NAME: "0.0.0.0"
       REST_ADVERTISED_HOST_NAME: kafka-connect
       CONNECT_REST_PORT: 8083
-      KAFKA_JMX_PORT: '9876'
+      KAFKA_JMX_PORT: "9876"
       KAFKA_OPTS: "-javaagent:/kafka/etc/jmx_prometheus_javaagent-0.17.2.jar=8080:/kafka/etc/jmx-exporter/metrics.yml"
 
   pg:
