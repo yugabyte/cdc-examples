@@ -14,13 +14,13 @@ import org.apache.commons.cli.Options;
  */
 public class CmdLineOpts {
   private final String connectorClass = "io.debezium.connector.postgresql.YugabyteDBConnector";
-  public String hostname = "172.165.27.143:5433";
+  public String hostname = "";
   public String databasePort = "5433";
   public String slotName = "test_slot";
   public String publicationName = "pub";
   public String databaseName = "yugabyte";
-  public String databasePassword = "yugabyte";
-  public String databaseUser = "yugabyte";
+  public String databasePassword = "";
+  public String databaseUser = "";
   public String snapshotMode = "never";
   public String pluginName = "yboutput";
   public String topicPrefix = "dbserver1";
@@ -31,6 +31,7 @@ public class CmdLineOpts {
     options.addOption("slot_name", true, "Replication slot name");
     options.addOption("publication_name", true, "Publication name");
     options.addOption("plugin_name", true, "Plugin name");
+    options.addOption("topic_prefix", true, "Topic prefix");
     options.addOption("hostname", true, "Database hostname");
     options.addOption("port", true, "Database port");
     options.addOption("database_name", true, "Database name");
@@ -62,6 +63,10 @@ public class CmdLineOpts {
 
     if (commandLine.hasOption("plugin_name")) {
       pluginName = commandLine.getOptionValue("plugin_name");
+    }
+
+    if (commandLine.hasOption("topic_prefix")) {
+      topicPrefix = commandLine.getOptionValue("topic_prefix");
     }
 
     if (commandLine.hasOption("hostname")) {
@@ -97,8 +102,8 @@ public class CmdLineOpts {
     props.setProperty("snapshot.mode", snapshotMode);
     props.setProperty("plugin.name", pluginName);
     props.setProperty("publication.name", publicationName);
-    props.setProperty("slot.name", "test_slot");
-    props.setProperty("topic.prefix", "dbserver1");
+    props.setProperty("slot.name", slotName);
+    props.setProperty("topic.prefix", topicPrefix);
 
     return props;
   }
