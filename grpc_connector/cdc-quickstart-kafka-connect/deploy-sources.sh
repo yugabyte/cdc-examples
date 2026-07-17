@@ -5,7 +5,7 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
   "name": "ybconnector1",
   "config": {
     "tasks.max":"2",
-    "connector.class": "io.debezium.connector.yugabytedb.YugabyteDBConnector",
+    "connector.class": "io.debezium.connector.yugabytedb.YugabyteDBgRPCConnector",
     "database.hostname":"'$NODE'",
     "database.master.addresses":"'$MASTERS'",
     "database.port":"5433",
@@ -31,7 +31,7 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
   "name": "ybconnector2",
   "config": {
     "tasks.max":"2",
-    "connector.class": "io.debezium.connector.yugabytedb.YugabyteDBConnector",
+    "connector.class": "io.debezium.connector.yugabytedb.YugabyteDBgRPCConnector",
     "database.hostname":"'$NODE'",
     "database.master.addresses":"'$MASTERS'",
     "database.port":"5433",
@@ -56,7 +56,7 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
   "name": "ybconnector3",
   "config": {
     "tasks.max":"2",
-    "connector.class": "io.debezium.connector.yugabytedb.YugabyteDBConnector",
+    "connector.class": "io.debezium.connector.yugabytedb.YugabyteDBgRPCConnector",
     "database.hostname":"'$NODE'",
     "database.master.addresses":"'$MASTERS'",
     "database.port":"5433",
@@ -81,7 +81,7 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
   "name": "ybconnector4",
   "config": {
     "tasks.max":"2",
-    "connector.class": "io.debezium.connector.yugabytedb.YugabyteDBConnector",
+    "connector.class": "io.debezium.connector.yugabytedb.YugabyteDBgRPCConnector",
     "database.hostname":"'$NODE'",
     "database.master.addresses":"'$MASTERS'",
     "database.port":"5433",
